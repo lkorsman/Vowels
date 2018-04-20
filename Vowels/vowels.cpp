@@ -18,6 +18,7 @@
 #include <string>
 using namespace std;
 
+// Array containing the .txt file names
 string filenameArray[20] = {"file1.txt", "file2.txt", "file3.txt", "file4.txt", 
 	"file5.txt", "file6.txt", "file7.txt", "file8.txt", "file9.txt", "file10.txt",
 	"file11.txt", "file12.txt", "file13.txt", "file14.txt", "file15.txt",
@@ -44,6 +45,7 @@ void* countVowels(void *filename);
 // Prints the message 'Goodbye', signaling the program ended
 void goodbye();
 
+// Entry point into the program
 int main()
 {
 	char input[200]; // Holds directory path of the .txt files
@@ -59,6 +61,7 @@ int main()
 	
 	welcome();
 	
+	// Prompt user for file directory
 	cout << "Enter a file path directory containing the 20 .txt files, "
 	"ending with the '/' \ncharacter. If the files are in the current "
 	"directory, then simply hit \nenter: ";
@@ -100,7 +103,9 @@ int main()
 	cout << "Count of I's: " << countI << endl;
 	cout << "Count of O's: " << countO << endl;
 	cout << "Count of U's: " << countU << endl;
+	
 	goodbye();
+	
 	return 0;
 }
 
