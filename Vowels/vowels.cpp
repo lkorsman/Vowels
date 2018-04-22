@@ -30,11 +30,13 @@ int countE = 0;						// Count of number of E's
 int countI = 0;						// Count of number of I's
 int countO = 0;						// Count of number of O's
 int countU = 0;						// Count of number of U's
+bool fileReadError = false;
 pthread_mutex_t vowelALock;			// Lock for A counter
 pthread_mutex_t vowelELock;			// Lock for E counter
 pthread_mutex_t vowelILock;			// Lock for I counter
 pthread_mutex_t vowelOLock;			// Lock for O counter
 pthread_mutex_t vowelULock;			// Lock for U counter
+pthread_mutex_t fileErrorLock;		// Lock for fileReadError variable
 
 // Introduces the program to the user
 void welcome();
@@ -58,6 +60,7 @@ int main()
 	pthread_mutex_init(&vowelILock, NULL);
 	pthread_mutex_init(&vowelOLock, NULL);
 	pthread_mutex_init(&vowelULock, NULL);
+	pthread_mutex_init(&fileErrorLock, NULL);
 	
 	welcome();
 	
@@ -97,13 +100,20 @@ int main()
 		pthread_join (threadArray[k], NULL);
 	}
 	
-	// Display counts of each vowel
-	cout << "Count of A's: " << countA << endl;
-	cout << "Count of E's: " << countE << endl;
-	cout << "Count of I's: " << countI << endl;
-	cout << "Count of O's: " << countO << endl;
-	cout << "Count of U's: " << countU << endl;
-	
+	if (!fileReadError)
+	{
+		// Display counts of each vowel
+		cout << "\nCount of A's: " << countA << endl;
+		cout << "Count of E's: " << countE << endl;
+		cout << "Count of I's: " << countI << endl;
+		cout << "Count of O's: " << countO << endl;
+		cout << "Count of U's: " << countU << endl;
+	}
+	else
+	{
+		cout << "\nFile read error." << endl;
+	}
+
 	goodbye();
 	
 	return 0;
@@ -183,7 +193,9 @@ void *countVowels(void *parameters)
 	}
 	else
 	{
-		cout << "\nError reading files." << endl;
+		pthread_mutex_lock(&fileErrorLock);
+		fileReadError = true;
+		pthread_mutex_unlock(&fileErrorLock);
 	}
 	pthread_exit(NULL);
 }
